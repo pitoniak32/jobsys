@@ -7,7 +7,7 @@ edition = "2021"
 # BEGIN Workspace deps
 menu = { path = "../menu", version = "0.1.0" }
 menu_derive = { path = "../menu_derive", version = "0.1.0" }
-jobsys_error = { path = "../jobsys_error", version = "0.1.0" }
+job_error = { path = "../job_error", version = "0.1.0" }
 job_entities = { path = "../job_entities", version = "0.1.0" }
 # END Workspace deps
 anyhow = "1.0.66"

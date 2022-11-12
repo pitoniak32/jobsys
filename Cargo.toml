@@ -5,5 +5,5 @@ members = [
     "job_entities",
     "menu_derive",
     "menu",
-    "jobsys_error",
+    "job_error",
 ] 

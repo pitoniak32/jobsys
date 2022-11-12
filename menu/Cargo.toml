@@ -6,7 +6,7 @@ edition = "2021"
 [lib]
 
 [dependencies]
-jobsys_error = { path = "../jobsys_error" }
+job_error = { path = "../job_error" }
 job_entities = { path = "../job_entities" }
 
 anyhow = "1.0.66"

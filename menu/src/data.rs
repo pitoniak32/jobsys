@@ -3,7 +3,7 @@ use anyhow::Result;
 use std::fs::File;
 use std::collections::HashMap;
 use uuid::Uuid;
-use jobsys_error::JobSysError;
+use job_error::JobSysError;
 use std::path::Path;
 
 use clap::Parser;
