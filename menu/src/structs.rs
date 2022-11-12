@@ -6,8 +6,13 @@ use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
 pub trait Choosable {
-  fn get_choice<T: fmt::Debug + Clone + IntoEnumIterator>(default: T) -> T {
-    let choices: Vec<T> = T::iter().collect::<Vec<T>>();
+  fn get_choice<T: fmt::Debug + Clone + IntoEnumIterator>(default: T) -> T;
+}
+
+/// Implement choosable fn for all enums that Have T traits
+impl <T: fmt::Debug + Clone + IntoEnumIterator> Choosable for T {
+  fn get_choice<U: fmt::Debug + Clone + IntoEnumIterator>(default: U) -> U {
+    let choices: Vec<U> = U::iter().collect::<Vec<U>>();
     pick_choice(choices, default)
   }
 }
@@ -20,8 +25,6 @@ pub enum MainMenuChoices {
   Settings,
   Quit,
 }
-
-impl Choosable for MainMenuChoices {}
 
 impl fmt::Display for MainMenuChoices {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -37,8 +40,6 @@ pub enum EntityOptions {
   View,
   Back,
 }
-
-impl Choosable for EntityOptions {}
 
 impl fmt::Display for EntityOptions {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

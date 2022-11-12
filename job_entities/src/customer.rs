@@ -4,7 +4,7 @@ use chrono::{Local, DateTime};
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 
-use crate::{IdAble, PathAble, vehicle::Vehicle, job::Job};
+use crate::{vehicle::Vehicle, job::Job, PathAble, IdAble};
 
 #[derive(Serialize, Deserialize)]
 pub struct Customer {
