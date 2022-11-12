@@ -1,0 +1,30 @@
+[package]
+name = "jobapp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# BEGIN Workspace deps
+menu = { path = "../menu", version = "0.1.0" }
+# END Workspace deps
+anyhow = "1.0.66"
+chrono = { version = "0.4.22", features = ["serde"] }
+clap = { version = "4.0.22", features = ["derive"] }
+clap-verbosity-flag = "2.0.0"
+env_logger = "0.9.3"
+log = "0.4.17"
+serde = { version = "1.0.147", features = ["derive"] }
+serde_derive = "1.0.145"
+serde_yaml = "0.9.13"
+strum = "0.24.1"
+strum_macros = "0.24.3"
+thiserror = "1.0.37"
+
+[dependencies.uuid]
+version = "1.2.1"
+features = [
+    "v4",
+    "serde",
+    "fast-rng",
+    "macro-diagnostics",
+]

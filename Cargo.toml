@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+    "jobapp",
+    "menu_derive",
+    "menu",
+] 
