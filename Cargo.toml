@@ -2,6 +2,8 @@
 
 members = [
     "jobapp",
+    "job_entities",
     "menu_derive",
     "menu",
+    "jobsys_error",
 ] 

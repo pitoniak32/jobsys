@@ -282,6 +282,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4217ad341ebadf8d8e724e264f13e593e0648f5b3e94b3896a5df283be015ecc"
 
 [[package]]
+name = "job_entities"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "serde_derive",
+ "serde_yaml",
+ "uuid",
+]
+
+[[package]]
 name = "jobapp"
 version = "0.1.0"
 dependencies = [
@@ -290,8 +301,11 @@ dependencies = [
  "clap",
  "clap-verbosity-flag",
  "env_logger",
+ "job_entities",
+ "jobsys_error",
  "log",
  "menu",
+ "menu_derive",
  "serde",
  "serde_derive",
  "serde_yaml",
@@ -299,6 +313,13 @@ dependencies = [
  "strum_macros",
  "thiserror",
  "uuid",
+]
+
+[[package]]
+name = "jobsys_error"
+version = "0.1.0"
+dependencies = [
+ "thiserror",
 ]
 
 [[package]]
@@ -343,6 +364,21 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 [[package]]
 name = "menu"
 version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "clap-verbosity-flag",
+ "job_entities",
+ "jobsys_error",
+ "log",
+ "serde",
+ "serde_derive",
+ "serde_yaml",
+ "strum",
+ "strum_macros",
+ "thiserror",
+ "uuid",
+]
 
 [[package]]
 name = "menu_derive"

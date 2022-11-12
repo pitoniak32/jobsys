@@ -1,24 +1,16 @@
 [package]
-name = "menu"
+name = "job_entities"
 version = "0.1.0"
 edition = "2021"
 
-[lib]
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-jobsys_error = { path = "../jobsys_error" }
-job_entities = { path = "../job_entities" }
-
-anyhow = "1.0.66"
-log = "0.4.17"
-strum = "0.24.1"
-strum_macros = "0.24.3"
-thiserror = "1.0.37"
+chrono = { version = "0.4.23", features = ["serde"] }
 serde = { version = "1.0.147", features = ["derive"] }
 serde_derive = "1.0.145"
 serde_yaml = "0.9.13"
-clap = { version = "4.0.22", features = ["derive"] }
-clap-verbosity-flag = "2.0.0"
+
 
 [dependencies.uuid]
 version = "1.2.1"
