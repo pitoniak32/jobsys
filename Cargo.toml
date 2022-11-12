@@ -1,7 +1,7 @@
 [workspace]
 
 members = [
-    "jobapp",
+    "job_bin",
     "job_entities",
     "menu_derive",
     "menu",
