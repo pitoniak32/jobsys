@@ -32,7 +32,6 @@ impl Vehicle {
       last_updated: now,
     }
   }
-
 }
 
 impl IdAble for Vehicle {

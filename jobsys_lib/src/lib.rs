@@ -5,6 +5,7 @@ pub mod vehicle;
 pub mod customer;
 pub mod error;
 pub mod system;
+pub mod menu;
 
 use customer::Customer;
 use vehicle::Vehicle;
