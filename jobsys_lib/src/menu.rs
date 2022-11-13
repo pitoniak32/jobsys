@@ -1,7 +1,8 @@
 use std::fmt;
 
-use menu::Menuable;
 use strum_macros::EnumIter;
+
+use menu::Menuable;
 
 #[derive(Debug, EnumIter, PartialEq, Clone)]
 pub enum MainMenuChoices {

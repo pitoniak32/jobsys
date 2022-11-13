@@ -1,8 +1,9 @@
+use std::process;
+
 use clap::Parser;
+use log::{error, debug};
 
 use jobsys_lib::system::{JobSys, Cli};
-use log::{error, debug};
-use std::process;
 
 fn main() {
     let cli = Cli::parse();
