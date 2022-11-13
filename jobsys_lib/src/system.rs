@@ -1,13 +1,19 @@
 use log::debug;
 use anyhow::Result;
+use menu::{MainMenuChoices, Choosable, EntityOptions};
 use std::fs::File;
 use std::collections::HashMap;
 use uuid::Uuid;
-use job_error::JobSysError;
+
 use std::path::Path;
 
 use clap::Parser;
-use job_entities::{customer::Customer, vehicle::Vehicle, job::Job, IdAble, PathAble};
+
+use crate::{IdAble, PathAble};
+use crate::customer::Customer;
+use crate::error::JobSysError;
+use crate::job::Job;
+use crate::vehicle::Vehicle;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -21,16 +27,18 @@ pub struct JobSys {
   vehicles: HashMap<Uuid, Vehicle>,
   jobs: HashMap<Uuid, Job>,
   base_path: String,
+  parsed_cli: Cli,
 }
 
 impl JobSys {
-  pub fn new(base_path: String) -> JobSys {
+  pub fn new(base_path: String, parsed_cli: Cli, ) -> JobSys {
     let (customers, vehicles, jobs) = JobSys::data_load(base_path.to_owned());
     JobSys {
       customers,
       vehicles,
       jobs,
       base_path,
+      parsed_cli,
     }
   }
 
@@ -81,5 +89,44 @@ impl JobSys {
     } else {
       debug!("inserted new record");
     }
+  }
+
+  pub fn run(&mut self) -> Result<()> {
+    debug!("log verbosity: {}", self.parsed_cli.verbose);
+    let mut main_menu_choice = MainMenuChoices::get_choice(MainMenuChoices::Quit);
+
+    while main_menu_choice != MainMenuChoices::Quit {
+
+      match main_menu_choice {
+        MainMenuChoices::Jobs=> {
+          debug!("creating job");
+          let _id = self.new_job("".to_owned());
+        },
+        MainMenuChoices::Vehicles => {
+          debug!("creating vehicle");
+          let _sub_menu_choice = EntityOptions::get_choice(EntityOptions::Back);
+          let _id = self.new_vehicle("".to_owned(), "".to_owned(), "".to_owned(), Some("2022".to_owned()));
+        },
+        MainMenuChoices::Customers => {
+          debug!("creating customer");
+          let _id = self.new_customer("test_name".to_owned());
+        },
+        MainMenuChoices::Settings => {
+          debug!("settings");
+          self.settings()?
+        },
+        MainMenuChoices::Quit => {
+          debug!("quitting");
+        },
+      };
+
+      if main_menu_choice != MainMenuChoices::Quit {
+        debug!("getting next choice from user");
+        main_menu_choice = MainMenuChoices::get_choice(MainMenuChoices::Quit);
+        debug!("Menu choice: {:?}", main_menu_choice);
+      }
+    }
+
+    Ok(())
   }
 }

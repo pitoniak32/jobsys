@@ -1,64 +1,84 @@
+use std::fmt;
+use std::io::{stdout, stdin, Write};
+
 use anyhow::Result;
-use log::debug;
+use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
 
-pub mod data;
-pub mod structs;
+pub trait Choosable {
+  fn get_choice<T: fmt::Debug + Clone + IntoEnumIterator>(default: T) -> T;
+}
 
-use data::{JobSys, Cli};
-use structs::{MainMenuChoices, EntityOptions};
+/// Implement choosable fn for all enums that Have T traits
+impl <T: fmt::Debug + Clone + IntoEnumIterator> Choosable for T {
+  fn get_choice<U: fmt::Debug + Clone + IntoEnumIterator>(default: U) -> U {
+    let choices: Vec<U> = U::iter().collect::<Vec<U>>();
+    pick_choice(choices, default)
+  }
+}
 
-use crate::structs::Choosable;
+#[derive(Debug, EnumIter, PartialEq, Clone)]
+pub enum MainMenuChoices {
+  Jobs,
+  Vehicles,
+  Customers,
+  Settings,
+  Quit,
+}
 
-pub fn run(parsed_cli: Cli, job_sys: &mut JobSys) -> Result<()> {
-  debug!("log verbosity: {}", parsed_cli.verbose);
-  let mut main_menu_choice = MainMenuChoices::get_choice(MainMenuChoices::Quit);
+impl fmt::Display for MainMenuChoices {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "{}", self)
+  }
+}
 
-  while main_menu_choice != MainMenuChoices::Quit {
+#[derive(Debug, EnumIter, PartialEq, Clone)]
+pub enum EntityOptions {
+  New,
+  Update,
+  Delete,
+  View,
+  Back,
+}
 
-    match main_menu_choice {
-      MainMenuChoices::Jobs=> {
-        debug!("creating job");
-        let _id = job_sys.new_job("".to_owned());
-      },
-      MainMenuChoices::Vehicles => {
-        debug!("creating vehicle");
-        let sub_menu_choice = EntityOptions::get_choice(EntityOptions::Back);
-        let _id = job_sys.new_vehicle("".to_owned(), "".to_owned(), "".to_owned(), Some("2022".to_owned()));
-      },
-      MainMenuChoices::Customers => {
-        debug!("creating customer");
-        let _id = job_sys.new_customer("test_name".to_owned());
-      },
-      MainMenuChoices::Settings => {
-        debug!("settings");
-        job_sys.settings()?
-      },
-      MainMenuChoices::Quit => {
-        debug!("quitting");
-      },
-    };
+impl fmt::Display for EntityOptions {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "{}", self)
+  }
+}
 
-    if main_menu_choice != MainMenuChoices::Quit {
-      debug!("getting next choice from user");
-      main_menu_choice = MainMenuChoices::get_choice(MainMenuChoices::Quit);
-      debug!("Menu choice: {:?}", main_menu_choice);
-    }
+pub fn prompt_for_menu_choice() -> Result<String> {
+  let mut s=String::new();
+
+  print!("Please enter choice: ");
+  let _ = stdout().flush();
+
+  stdin().read_line(&mut s)?;
+
+  if let Some('\n')=s.chars().next_back() {
+      s.pop();
+  }
+  if let Some('\r')=s.chars().next_back() {
+      s.pop();
   }
 
-  Ok(())
-}
+  Ok(s)
+} 
 
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+fn pick_choice<T: Clone + fmt::Debug>(choices: Vec<T>, default: T) -> T  {
+    let copy: Vec<T> = choices.clone();
+    let mut display = String::new();
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    let mut i = 1;
+    for choice in choices {
+      display.push_str(&format!("{:?}) {:?}\n", i, choice));
+      i += 1;
     }
+
+    println!("{}", display);
+
+    let choice = prompt_for_menu_choice().unwrap_or("1".to_owned());
+    let num: usize = choice.parse().unwrap();
+
+    copy.get(num-1).unwrap_or(&default).to_owned()
 }

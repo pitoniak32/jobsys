@@ -3,6 +3,8 @@ use uuid::Uuid;
 pub mod job;
 pub mod vehicle;
 pub mod customer;
+pub mod error;
+pub mod system;
 
 use customer::Customer;
 use vehicle::Vehicle;

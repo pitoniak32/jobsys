@@ -6,9 +6,6 @@ edition = "2021"
 [lib]
 
 [dependencies]
-job_error = { path = "../job_error" }
-job_entities = { path = "../job_entities" }
-
 anyhow = "1.0.66"
 log = "0.4.17"
 strum = "0.24.1"
