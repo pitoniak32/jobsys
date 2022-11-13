@@ -1,10 +1,7 @@
-use std::fmt;
-
 use strum_macros::EnumIter;
+use menu_derive::EnumMenuable;
 
-use menu::Menuable;
-
-#[derive(Debug, EnumIter, PartialEq, Clone)]
+#[derive(Debug, EnumIter, PartialEq, Clone, EnumMenuable)]
 pub enum MainMenuChoices {
   Jobs,
   Vehicles,
@@ -13,27 +10,11 @@ pub enum MainMenuChoices {
   Quit,
 }
 
-impl Menuable for MainMenuChoices {}
-
-impl fmt::Display for MainMenuChoices {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "{}", self)
-  }
-}
-
-#[derive(Debug, EnumIter, PartialEq, Clone)]
+#[derive(Debug, EnumIter, PartialEq, Clone, EnumMenuable)]
 pub enum EntityOptions {
   New,
   Update,
   Delete,
   View,
   Back,
-}
-
-impl Menuable for EntityOptions {}
-
-impl fmt::Display for EntityOptions {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "{}", self)
-  }
 }

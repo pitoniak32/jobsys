@@ -8,6 +8,6 @@ Create a library for CLI menus that can be extended easily using Macros, and Tra
 
 
 ## TODO List
-- [ ] Make errors from menu generic
-- [ ] Separate system logic from menu logic
+- [X] Make errors from menu generic
+- [X] Separate system logic from menu logic
 - [X] Rename modules / files

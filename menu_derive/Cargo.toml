@@ -7,5 +7,6 @@ edition = "2021"
 proc-macro = true
 
 [dependencies]
+menu = { path = "../menu", version = "0.1.0" }
 quote = "1.0.21"
 syn = "1.0.103"

@@ -10,7 +10,7 @@ fn main() {
 
     env_logger::builder().filter_level(cli.verbose.log_level_filter()).init();
 
-    let mut jobsys = JobSys::new("..".to_owned(), cli);
+    let mut jobsys = JobSys::new("".to_owned(), cli);
 
     match jobsys.run() {
         Ok(_) => {
