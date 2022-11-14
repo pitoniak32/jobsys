@@ -4,9 +4,9 @@ use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 use chrono::{Local, DateTime};
 
-use crate::{IdAble, PathAble};
+use crate::IdAble;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Vehicle {
   id: Uuid,
   vin_num: String,
@@ -37,12 +37,6 @@ impl Vehicle {
 impl IdAble for Vehicle {
   fn get_id(&self) -> Uuid {
     self.id
-  }
-}
-
-impl PathAble for Vehicle {
-  fn get_path() -> String {
-    "vehicles.yml".to_owned()
   }
 }
 

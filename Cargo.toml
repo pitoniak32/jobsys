@@ -3,6 +3,6 @@
 members = [
     "jobsys_bin",
     "jobsys_lib",
-    "menu_derive",
-    "menu",
+    "inquirer_rs",
+    "inquirer_derive",
 ] 

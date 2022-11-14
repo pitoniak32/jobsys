@@ -11,10 +11,14 @@ pub fn enum_choosable_derive(input: TokenStream) -> TokenStream {
     let name = &input.ident;
 
     let expanded = quote!{
-        impl menu::Menuable for #name {}
+        impl inquirer_rs::menu::Menuable for #name {}
+        impl inquirer_rs::menu::InquireableMenu for #name {}
+        impl std::fmt::Display for #name {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                write!(f, "{:?}", self)
+            }
+        }
     };
 
     TokenStream::from(expanded)
 }
-
-// pub fn inquireable(_input: TokenStream) -> TokenStream { Will allow Enums, Structs to have a default inquirerr}

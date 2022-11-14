@@ -4,8 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-menu = { path = "../menu", version = "0.1.0" }
-menu_derive = { path = "../menu_derive", version = "0.1.0" }
+inquirer_derive = { path = "../inquirer_derive", version = "0.1.0" }
+inquirer_rs = { path = "../inquirer_rs", version = "0.1.0" }
+smart-default = "0.6.0"
 thiserror = "1.0.37"
 chrono = { version = "0.4.23", features = ["serde"] }
 serde = { version = "1.0.147", features = ["derive"] }

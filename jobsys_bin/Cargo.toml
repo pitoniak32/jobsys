@@ -4,8 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-menu = { path = "../menu", version = "0.1.0" }
-menu_derive = { path = "../menu_derive", version = "0.1.0" }
 jobsys_lib = { path = "../jobsys_lib", version = "0.1.0" }
 
 anyhow = "1.0.66"

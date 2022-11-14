@@ -2,9 +2,9 @@ use chrono::{Local, DateTime};
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 
-use crate::{PathAble, IdAble};
+use crate::IdAble;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Job {
   id: Uuid,
   description: String,
@@ -22,12 +22,6 @@ impl Job {
       date_created: now,
       last_updated: now,
     } 
-  }
-}
-
-impl PathAble for Job {
-  fn get_path() -> String {
-    "jobs.yml".to_owned()
   }
 }
 

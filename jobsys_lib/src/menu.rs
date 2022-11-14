@@ -1,20 +1,25 @@
+use inquirer_derive::EnumMenuable;
 use strum_macros::EnumIter;
-use menu_derive::EnumMenuable;
+use smart_default::SmartDefault;
 
-#[derive(Debug, EnumIter, PartialEq, Clone, EnumMenuable)]
+#[derive(Debug, EnumIter, PartialEq, Clone, SmartDefault, EnumMenuable)]
 pub enum MainMenuChoices {
+  Customers,
   Jobs,
   Vehicles,
-  Customers,
   Settings,
+
+  #[default]
   Quit,
 }
 
-#[derive(Debug, EnumIter, PartialEq, Clone, EnumMenuable)]
+#[derive(Debug, EnumIter, PartialEq, Clone, SmartDefault, EnumMenuable)]
 pub enum EntityOptions {
   New,
   Update,
   Delete,
   View,
+
+  #[default]
   Back,
 }

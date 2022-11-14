@@ -17,10 +17,6 @@ pub enum JobEntities {
   Job(Job),
 }
 
-pub trait Inquireable {
-  fn inquire<T>() -> T;
-}
-
 pub trait IdAble {
   fn get_id(&self) -> Uuid;
 }
