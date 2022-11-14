@@ -1,16 +1,15 @@
 use std::process;
 
+use anyhow::Result;
 use clap::Parser;
 use log::{error, debug};
 
-use jobsys_lib::{system::{JobSys, Cli}, menu::MainMenuChoices}; 
+use jobsys_lib::system::{JobSys, Cli}; 
 
-fn main() {
+fn main() -> Result<()> {
     let cli = Cli::parse();
 
     env_logger::builder().filter_level(cli.verbose.log_level_filter()).init();
-
-    println!("{}", MainMenuChoices::Customers);
 
     let mut jobsys = JobSys::new("".to_owned(), cli);
 
@@ -25,5 +24,7 @@ fn main() {
             process::exit(1);
         },
     }
+
+    Ok(())
 }
 

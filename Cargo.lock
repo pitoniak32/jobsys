@@ -288,6 +288,7 @@ name = "inquirer_rs"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "chrono",
  "log",
  "strum",
 ]
@@ -307,6 +308,7 @@ dependencies = [
  "clap",
  "clap-verbosity-flag",
  "env_logger",
+ "inquirer_rs",
  "jobsys_lib",
  "log",
  "serde",

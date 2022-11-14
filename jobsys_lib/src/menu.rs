@@ -8,6 +8,7 @@ pub enum MainMenuChoices {
   Jobs,
   Vehicles,
   Settings,
+  Save,
 
   #[default]
   Quit,

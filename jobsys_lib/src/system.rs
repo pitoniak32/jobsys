@@ -40,35 +40,36 @@ impl JobSys {
   }
 
   pub fn new_customer(&mut self) -> Result<()> {
-    let name = inquire_string("Enter name: ".to_string())?;
+    let name = inquire_string("Enter name: ")?;
     let customer = Customer::new(name);
     JobSys::log_insert_result(self.customers.insert(customer.get_id().to_owned(), customer));
     Ok(())
   }
 
   pub fn update_customer(&mut self) -> Result<()> {
-    let id = self.get_customer_id();
+    let id = self.inquire_customer_id();
     let customer = self.customers.get_mut(&id).unwrap();
-    let name = inquire_string("Enter name: ".to_string())?;
+    let name = inquire_string("Enter name: ")?;
     customer.update_name(name);
     Ok(())
   }
 
-  pub fn get_customer_id(&mut self) -> Uuid {
+  pub fn inquire_customer_id(&mut self) -> Uuid {
     let choices: Vec<Customer> = self.customers.clone().into_values().collect();
     let display = into_menu_string(&choices, "Customers");
     let choice = inquire_menu(display, &choices); 
     choice.get_id()
   }
 
-  pub fn new_vehicle(&mut self, vin_num: String, make: String, model: String, year: Option<String>) {
-    let customer_id = self.get_customer_id();
-    let vehicle = Vehicle::new(vin_num, make, model, year);
+  pub fn new_vehicle(&mut self) -> Result<()> {
+    let customer_id = self.inquire_customer_id();
+    let vehicle = Vehicle::inquire()?;
     self.customers.get_mut(&customer_id).unwrap().upsert_vehicle(vehicle);
+    Ok(())
   }
 
   pub fn new_job(&mut self, description: String) {
-    let customer_id = self.get_customer_id();
+    let customer_id = self.inquire_customer_id();
     let job = Job::new(description);
     self.customers.get_mut(&customer_id).unwrap().upsert_job(job);
   }
@@ -102,29 +103,28 @@ impl JobSys {
     let mut main_menu_choice: MainMenuChoices = MainMenuChoices::inquire("Main Menu");
 
     while main_menu_choice != MainMenuChoices::Quit {
-      let sub_menu_choice: EntityOptions = EntityOptions::inquire(&format!("{} Menu", main_menu_choice.to_string()));
 
       match main_menu_choice {
         MainMenuChoices::Jobs => {
-          match sub_menu_choice {
+          match EntityOptions::inquire(&format!("{} Menu", main_menu_choice.to_string())) {
             EntityOptions::New => todo!(),
             EntityOptions::Update => todo!(),
             EntityOptions::Delete => todo!(),
             EntityOptions::View => todo!(),
             EntityOptions::Back => todo!(),
-        }
+          }
         },
         MainMenuChoices::Vehicles => {
-          match sub_menu_choice {
-            EntityOptions::New => todo!(),
+          match EntityOptions::inquire(&format!("{} Menu", main_menu_choice.to_string())) {
+            EntityOptions::New => self.new_vehicle()?,
             EntityOptions::Update => todo!(),
             EntityOptions::Delete => todo!(),
             EntityOptions::View => todo!(),
             EntityOptions::Back => todo!(),
-        }
+          }
         },
         MainMenuChoices::Customers => {
-          match sub_menu_choice {
+          match EntityOptions::inquire(&format!("{} Menu", main_menu_choice.to_string())) {
             EntityOptions::New => {
               self.new_customer()?;
             },
@@ -134,7 +134,10 @@ impl JobSys {
             EntityOptions::Delete => todo!(),
             EntityOptions::View => todo!(),
             EntityOptions::Back => todo!(),
-        }
+          }
+        },
+        MainMenuChoices::Save => {
+          self.data_save()
         },
         MainMenuChoices::Settings => {
           debug!("settings");

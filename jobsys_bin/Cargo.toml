@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 jobsys_lib = { path = "../jobsys_lib", version = "0.1.0" }
+inquirer_rs = { path = "../inquirer_rs", version = "0.1.0" }
 
 anyhow = "1.0.66"
 chrono = { version = "0.4.22", features = ["serde"] }

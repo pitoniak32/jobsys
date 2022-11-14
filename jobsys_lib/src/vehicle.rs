@@ -1,8 +1,10 @@
 use std::fmt;
 
+use anyhow::Result;
+use inquirer_rs::helpers::{inquire_string, inquire_year};
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
-use chrono::{Local, DateTime};
+use chrono::{Utc, DateTime};
 
 use crate::IdAble;
 
@@ -12,15 +14,15 @@ pub struct Vehicle {
   vin_num: String,
   make: String,
   model: String,
-  year: Option<String>,
-  last_oil_change: Option<DateTime<Local>>,
-  date_created: DateTime<Local>,
-  last_updated: DateTime<Local>,
+  year: Option<i32>,
+  last_oil_change: Option<DateTime<Utc>>,
+  date_created: DateTime<Utc>,
+  last_updated: DateTime<Utc>,
 }
 
 impl Vehicle {
-  pub fn new(vin_num: String, make: String, model: String, year: Option<String>) -> Vehicle {
-    let now = Local::now();
+  pub fn new(vin_num: String, make: String, model: String, year: Option<i32>) -> Vehicle {
+    let now = Utc::now();
     Vehicle {
       id: Uuid::new_v4(),
       vin_num,
@@ -31,6 +33,14 @@ impl Vehicle {
       date_created: now,
       last_updated: now,
     }
+  }
+
+  pub fn inquire() -> Result<Vehicle> {
+    let vin_num = inquire_string("Enter vin number: ")?;
+    let make = inquire_string("Enter make: ")?;
+    let model = inquire_string("Enter model: ")?;
+    let year = inquire_year();
+    Ok(Vehicle::new(vin_num, make, model, year))
   }
 }
 

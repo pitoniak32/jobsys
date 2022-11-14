@@ -6,6 +6,12 @@ use thiserror::Error;
 pub enum JobSysError {
   #[error("NOT IMPLEMENTED")]
   NonImplementedMenuChoice,
+
+  #[error("Failed to save customer data to file")]
+  CustomerDataSaveFailed,
+
+  #[error("Failed to load customer data from file")]
+  CustomerDataLoadFailed,
 }
 
 #[cfg(test)]
