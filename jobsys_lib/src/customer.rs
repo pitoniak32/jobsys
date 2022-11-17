@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::fmt;
 
 use chrono::{Local, DateTime};
+use inquirer_rs::Inquireable;
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 
@@ -17,6 +18,7 @@ pub struct Customer {
   last_updated: DateTime<Local>,
 }
 
+
 impl Customer {
   pub fn new(name: String) -> Customer {
     let now = Local::now();
@@ -30,9 +32,11 @@ impl Customer {
     }
   }
 
-  pub fn update_name(&mut self, name: String) {
-    self.name = name;
-    self.set_last_updated();
+  pub fn update_name(&mut self, name: Option<String>) {
+    if let Some(n) = name {
+      self.name = n;
+      self.set_last_updated();
+    }
   }
 
   /// If the vehicle is not in the list it will be added
@@ -60,6 +64,27 @@ impl Customer {
   fn set_last_updated(&mut self) {
     self.last_updated = Local::now();
   }
+}
+
+impl Inquireable for Customer {
+    type Item = Customer;
+    fn inquire(_: Option<&str>) -> Option<Self::Item> {
+      let name = String::inquire_retry_on_none(2, Some("Invalid String."), Some("Enter Name: "));
+      let now = Local::now();
+      let cust = Customer {
+        id: Uuid::new_v4(),
+        name: match name {
+          Some(n) => n,
+          None => "".to_owned(),
+        },
+        vehicles: HashMap::new(),
+        jobs: HashMap::new(),
+        date_created: now,
+        last_updated: now,
+      };
+      Some(cust)
+    }
+
 }
 
 impl PathAble for Customer {

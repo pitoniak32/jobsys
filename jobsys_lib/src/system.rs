@@ -3,7 +3,8 @@ use std::fs::File;
 use std::collections::HashMap;
 
 use clap::Parser;
-use inquirer_rs::helpers::{into_menu_string, inquire_string, inquire_menu};
+use inquirer_rs::Inquireable;
+use inquirer_rs::helpers::{into_menu_string, inquire_menu};
 use inquirer_rs::menu::InquireableMenu;
 use uuid::Uuid;
 use log::debug;
@@ -40,16 +41,17 @@ impl JobSys {
   }
 
   pub fn new_customer(&mut self) -> Result<()> {
-    let name = inquire_string("Enter name: ")?;
-    let customer = Customer::new(name);
-    JobSys::log_insert_result(self.customers.insert(customer.get_id().to_owned(), customer));
-    Ok(())
+    if let Some(cust) = Customer::inquire_retry_on_none(2, None, None) {
+      JobSys::log_insert_result(self.customers.insert(cust.get_id().to_owned(), cust));
+      return Ok(());
+    }
+    Err(JobSysError::FailedToCreateNewCustomer)?
   }
 
   pub fn update_customer(&mut self) -> Result<()> {
     let id = self.inquire_customer_id();
     let customer = self.customers.get_mut(&id).unwrap();
-    let name = inquire_string("Enter name: ")?;
+    let name = String::inquire_retry_on_none( 2, Some("Invalid Customer Please Try Again."), Some("Enter name: "));
     customer.update_name(name);
     Ok(())
   }
@@ -63,9 +65,11 @@ impl JobSys {
 
   pub fn new_vehicle(&mut self) -> Result<()> {
     let customer_id = self.inquire_customer_id();
-    let vehicle = Vehicle::inquire()?;
-    self.customers.get_mut(&customer_id).unwrap().upsert_vehicle(vehicle);
-    Ok(())
+    if let Some(v) = Vehicle::inquire_retry_on_none(2, Some("Invalid Vehicle Please Try Again."),  None) {
+      self.customers.get_mut(&customer_id).unwrap().upsert_vehicle(v);
+      return Ok(())
+    }
+    Err(JobSysError::FailedToCreateNewVehicle)?
   }
 
   pub fn new_job(&mut self, description: String) {

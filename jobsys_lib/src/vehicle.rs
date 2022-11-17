@@ -1,10 +1,10 @@
 use std::fmt;
 
-use anyhow::Result;
-use inquirer_rs::helpers::{inquire_string, inquire_year};
+use inquirer_rs::Inquireable;
+use log::debug;
 use uuid::Uuid;
 use serde::{Serialize, Deserialize};
-use chrono::{Utc, DateTime};
+use chrono::{Utc, DateTime, NaiveDate, Datelike};
 
 use crate::IdAble;
 
@@ -35,13 +35,22 @@ impl Vehicle {
     }
   }
 
-  pub fn inquire() -> Result<Vehicle> {
-    let vin_num = inquire_string("Enter vin number: ")?;
-    let make = inquire_string("Enter make: ")?;
-    let model = inquire_string("Enter model: ")?;
-    let year = inquire_year();
-    Ok(Vehicle::new(vin_num, make, model, year))
-  }
+}
+
+impl Inquireable for Vehicle {
+    type Item = Vehicle;
+    fn inquire(_prompt_label: Option<&str>) -> Option<Self::Item> {
+      let vin_num = String::inquire(Some("Enter vin number: "));
+      let make = String::inquire(Some("Enter make: "));
+      let model = String::inquire(Some("Enter model: "));
+      let year = NaiveDate::inquire(Some("Enter year: "));
+      debug!("v: {:?}, ma: {:?}, mo: {:?} y: {:?}", vin_num, make, model, year);
+      if let (Some(vin_num), Some(make), Some(model), Some(year)) = (vin_num, make, model, year) {
+        debug!("v: {}, ma: {}, mo: {} y: {}", vin_num, make, model, year);
+        return Some(Vehicle::new(vin_num, make, model, Some(year.year())))
+      }
+      None
+    }
 }
 
 impl IdAble for Vehicle {

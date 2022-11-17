@@ -12,6 +12,12 @@ pub enum JobSysError {
 
   #[error("Failed to load customer data from file")]
   CustomerDataLoadFailed,
+
+  #[error("Failed to create new Customer")]
+  FailedToCreateNewCustomer,
+
+  #[error("Failed to create new Vehicle")]
+  FailedToCreateNewVehicle,
 }
 
 #[cfg(test)]
