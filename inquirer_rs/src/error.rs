@@ -4,8 +4,8 @@ use thiserror::Error;
 /// using anyhow for error conversion and propagation.
 #[derive(Error, Debug)]
 pub enum InquisitionError {
-  #[error("Retry Failed")]
-  FailedRetry,
+    #[error("Retry Failed")]
+    FailedRetry,
 }
 
 #[cfg(test)]

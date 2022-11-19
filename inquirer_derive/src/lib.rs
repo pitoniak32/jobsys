@@ -1,8 +1,8 @@
 extern crate proc_macro;
 use proc_macro::TokenStream;
 
-use syn::{parse_macro_input, DeriveInput};
 use quote::quote;
+use syn::{parse_macro_input, DeriveInput};
 
 #[proc_macro_derive(EnumMenuable)]
 pub fn enum_choosable_derive(input: TokenStream) -> TokenStream {
@@ -10,7 +10,7 @@ pub fn enum_choosable_derive(input: TokenStream) -> TokenStream {
 
     let name = &input.ident;
 
-    let expanded = quote!{
+    let expanded = quote! {
         impl inquirer_rs::menu::Menuable for #name {}
         impl inquirer_rs::menu::InquireableMenu for #name {}
         impl std::fmt::Display for #name {
