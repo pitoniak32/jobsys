@@ -15,11 +15,14 @@ pub enum MainMenuChoices {
 }
 
 #[derive(Debug, EnumIter, PartialEq, Clone, SmartDefault, EnumMenuable)]
-pub enum EntityOptions {
-    New,
-    Update,
-    Delete,
-    View,
+pub enum CustomerOptions {
+    ViewJobs,
+    AddJob,
+    UpdateJob,
+    ViewVehicles,
+    AddVehicle,
+    UpdateVehicle,
+    UpdateName,
 
     #[default]
     Back,

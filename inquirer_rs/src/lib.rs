@@ -1,6 +1,9 @@
 use std::io::Write;
 
+use anyhow::Result;
 use chrono::NaiveDate;
+use error::InquisitionError;
+use log::debug;
 
 mod error;
 pub mod helpers;
@@ -14,7 +17,7 @@ pub trait Inquireable {
     /// return Some(Item): if inquisition is successful.  
     ///
     /// return None: if inquisition is unsuccessful.
-    fn inquire(prompt_label: Option<&str>) -> Option<Self::Item>;
+    fn inquire(prompt_label: Option<&str>) -> Result<Self::Item>;
 
     /// Inquire once, and if `None` is returned, Inquire `retries` times before returning `None`  
     ///
@@ -23,12 +26,16 @@ pub trait Inquireable {
         retries: u32,
         retry_msg: Option<&str>,
         prompt_label: Option<&str>,
-    ) -> Option<Self::Item> {
+    ) -> Result<Self::Item> {
+        debug!("starting first try");
         let first_try = Self::inquire(prompt_label);
 
-        if let Some(ft) = first_try {
-            return Some(ft);
+        if let Ok(ft) = first_try {
+            debug!("first try Ok");
+            return Ok(ft);
         }
+
+        debug!("retry");
 
         for i in 0..retries {
             if let Some(rtry) = retry_msg {
@@ -40,17 +47,17 @@ pub trait Inquireable {
                 println!("")
             }
 
-            if let Some(val) = Self::inquire(prompt_label) {
-                return Some(val);
+            if let Ok(val) = Self::inquire(prompt_label) {
+                return Ok(val);
             }
         }
-        None
+        Err(InquisitionError::FailedRetry)?
     }
 }
 
 impl Inquireable for String {
     type Item = String;
-    fn inquire(prompt_label: Option<&str>) -> Option<Self::Item> {
+    fn inquire(prompt_label: Option<&str>) -> Result<Self::Item> {
         let mut s = String::new();
 
         if let Some(lbl) = prompt_label {
@@ -59,49 +66,47 @@ impl Inquireable for String {
 
         if let Ok(_) = std::io::stdout().flush() {
             if let Ok(_) = std::io::stdin().read_line(&mut s) {
-                return Some(s.trim().to_owned());
+                return Ok(s.trim().to_owned());
             }
         }
-        None
+
+        Err(InquisitionError::String)?
     }
 }
 
 impl Inquireable for i32 {
     type Item = i32;
 
-    fn inquire(prompt_label: Option<&str>) -> Option<Self::Item> {
-        if let Some(num) = String::inquire(prompt_label) {
-            return match num.parse::<i32>() {
-                Ok(n) => Some(n),
-                Err(_) => None,
-            };
-        }
-        None
+    fn inquire(prompt_label: Option<&str>) -> Result<Self::Item> {
+        let string_num = String::inquire(prompt_label)?;
+
+        return match string_num.parse::<i32>() {
+            Ok(n) => Ok(n),
+            Err(_) => Err(InquisitionError::I32)?,
+        };
     }
 }
 
 impl Inquireable for u32 {
     type Item = u32;
-    fn inquire(prompt_label: Option<&str>) -> Option<Self::Item> {
-        if let Some(num) = String::inquire(prompt_label) {
-            return match num.parse::<u32>() {
-                Ok(n) => Some(n),
-                Err(_) => None,
-            };
-        }
-        None
+
+    fn inquire(prompt_label: Option<&str>) -> Result<Self::Item> {
+        let string_num = String::inquire(prompt_label)?;
+
+        return match string_num.parse::<u32>() {
+            Ok(n) => Ok(n),
+            Err(_) => Err(InquisitionError::U32)?,
+        };
     }
 }
 
 impl Inquireable for NaiveDate {
     type Item = NaiveDate;
-    fn inquire(prompt_label: Option<&str>) -> Option<Self::Item> {
-        let year = i32::inquire(prompt_label);
-        if let Some(year) = year {
-            if let Some(valid_year) = NaiveDate::from_ymd_opt(year, 1, 1) {
-                return Some(valid_year);
-            }
+    fn inquire(prompt_label: Option<&str>) -> Result<Self::Item> {
+        let year = i32::inquire(prompt_label)?;
+        match NaiveDate::from_ymd_opt(year, 1, 1) {
+            Some(valid_year) => Ok(valid_year),
+            None => Err(InquisitionError::NaiveDate)?,
         }
-        None
     }
 }

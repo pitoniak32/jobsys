@@ -17,11 +17,11 @@ fn main() -> Result<()> {
 
     match jobsys.run() {
         Ok(_) => {
-            debug!("Completed Ok... Saving Data...");
+            debug!("Completed Ok, Saving Data...");
             jobsys.data_save();
         }
         Err(err) => {
-            error!("Error: {}", err);
+            error!("System Encountered an Error, Saving Data... msg: {}", err);
             jobsys.data_save();
             process::exit(1);
         }

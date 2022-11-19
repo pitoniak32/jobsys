@@ -1,4 +1,4 @@
-use std::fmt;
+use anyhow::Result;
 use strum::IntoEnumIterator;
 
 use crate::helpers::{inquire_menu, into_menu_string};
@@ -6,7 +6,12 @@ use crate::helpers::{inquire_menu, into_menu_string};
 /// When `#[derive(EnumMenuable)]` is used on an enum, it will implement functions to help
 /// with using that enum as a TUI menu.
 pub trait Menuable:
-    IntoEnumIterator + fmt::Display + std::clone::Clone + Default + InquireableMenu
+    IntoEnumIterator
+    + std::fmt::Display
+    + std::clone::Clone
+    + Default
+    + InquireableMenu
+    + std::fmt::Debug
 {
 }
 
@@ -32,7 +37,7 @@ pub trait InquireableMenu {
     /// //  
     /// // Enter choice:
     /// ```
-    fn inquire<T: Menuable>(title: &str) -> T {
+    fn inquire<T: Menuable>(title: &str) -> Result<T> {
         let choices: Vec<T> = T::iter().collect::<Vec<T>>();
         inquire_menu(into_menu_string(&choices, title), &choices)
     }

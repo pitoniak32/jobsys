@@ -1,8 +1,8 @@
 use std::fmt;
 
+use anyhow::Result;
 use chrono::{DateTime, Datelike, NaiveDate, Utc};
 use inquirer_rs::Inquireable;
-use log::debug;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -38,20 +38,13 @@ impl Vehicle {
 
 impl Inquireable for Vehicle {
     type Item = Vehicle;
-    fn inquire(_prompt_label: Option<&str>) -> Option<Self::Item> {
-        let vin_num = String::inquire(Some("Enter vin number: "));
-        let make = String::inquire(Some("Enter make: "));
-        let model = String::inquire(Some("Enter model: "));
-        let year = NaiveDate::inquire(Some("Enter year: "));
-        debug!(
-            "v: {:?}, ma: {:?}, mo: {:?} y: {:?}",
-            vin_num, make, model, year
-        );
-        if let (Some(vin_num), Some(make), Some(model), Some(year)) = (vin_num, make, model, year) {
-            debug!("v: {}, ma: {}, mo: {} y: {}", vin_num, make, model, year);
-            return Some(Vehicle::new(vin_num, make, model, Some(year.year())));
-        }
-        None
+    fn inquire(_prompt_label: Option<&str>) -> Result<Self::Item> {
+        Ok(Vehicle::new(
+            String::inquire(Some("Enter vin number: "))?,
+            String::inquire(Some("Enter make: "))?,
+            String::inquire(Some("Enter model: "))?,
+            Some(NaiveDate::inquire(Some("Enter year: "))?.year()),
+        ))
     }
 }
 

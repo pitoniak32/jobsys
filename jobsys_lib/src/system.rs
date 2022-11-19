@@ -12,9 +12,7 @@ use uuid::Uuid;
 
 use crate::customer::Customer;
 use crate::error::JobSysError;
-use crate::job::Job;
-use crate::menu::{EntityOptions, MainMenuChoices};
-use crate::vehicle::Vehicle;
+use crate::menu::CustomerOptions;
 use crate::{IdAble, PathAble};
 
 #[derive(Parser)]
@@ -41,53 +39,20 @@ impl JobSys {
     }
 
     pub fn new_customer(&mut self) -> Result<()> {
-        if let Some(cust) = Customer::inquire_retry_on_none(2, None, None) {
-            JobSys::log_insert_result(self.customers.insert(cust.get_id().to_owned(), cust));
-            return Ok(());
+        match Customer::inquire_retry_on_none(2, None, None) {
+            Ok(cust) => {
+                JobSys::log_insert_result(self.customers.insert(cust.get_id().to_owned(), cust));
+                Ok(())
+            }
+            Err(e) => Err(JobSysError::FailedToCreateNewCustomer)?,
         }
-        Err(JobSysError::FailedToCreateNewCustomer)?
     }
 
-    pub fn update_customer(&mut self) -> Result<()> {
-        let id = self.inquire_customer_id();
-        let customer = self.customers.get_mut(&id).unwrap();
-        let name = String::inquire_retry_on_none(
-            2,
-            Some("Invalid Customer Please Try Again."),
-            Some("Enter name: "),
-        );
-        customer.update_name(name);
-        Ok(())
-    }
-
-    pub fn inquire_customer_id(&mut self) -> Uuid {
+    pub fn inquire_customer_mut<'a>(&'a mut self) -> Result<&'a mut Customer> {
         let choices: Vec<Customer> = self.customers.clone().into_values().collect();
         let display = into_menu_string(&choices, "Customers");
-        let choice = inquire_menu(display, &choices);
-        choice.get_id()
-    }
-
-    pub fn new_vehicle(&mut self) -> Result<()> {
-        let customer_id = self.inquire_customer_id();
-        if let Some(v) =
-            Vehicle::inquire_retry_on_none(2, Some("Invalid Vehicle Please Try Again."), None)
-        {
-            self.customers
-                .get_mut(&customer_id)
-                .unwrap()
-                .upsert_vehicle(v);
-            return Ok(());
-        }
-        Err(JobSysError::FailedToCreateNewVehicle)?
-    }
-
-    pub fn new_job(&mut self, description: String) {
-        let customer_id = self.inquire_customer_id();
-        let job = Job::new(description);
-        self.customers
-            .get_mut(&customer_id)
-            .unwrap()
-            .upsert_job(job);
+        let choice = inquire_menu(display, &choices)?;
+        Ok(self.customers.get_mut(&choice.get_id()).unwrap())
     }
 
     pub fn settings(&self) -> Result<()> {
@@ -120,55 +85,24 @@ impl JobSys {
 
     pub fn run(&mut self) -> Result<()> {
         debug!("log verbosity: {}", self.parsed_cli.verbose);
-        let mut main_menu_choice: MainMenuChoices = MainMenuChoices::inquire("Main Menu");
 
-        while main_menu_choice != MainMenuChoices::Quit {
-            match main_menu_choice {
-                MainMenuChoices::Jobs => {
-                    match EntityOptions::inquire(&format!("{} Menu", main_menu_choice.to_string()))
-                    {
-                        EntityOptions::New => todo!(),
-                        EntityOptions::Update => todo!(),
-                        EntityOptions::Delete => todo!(),
-                        EntityOptions::View => todo!(),
-                        EntityOptions::Back => todo!(),
-                    }
-                }
-                MainMenuChoices::Vehicles => {
-                    match EntityOptions::inquire(&format!("{} Menu", main_menu_choice.to_string()))
-                    {
-                        EntityOptions::New => self.new_vehicle()?,
-                        EntityOptions::Update => todo!(),
-                        EntityOptions::Delete => todo!(),
-                        EntityOptions::View => todo!(),
-                        EntityOptions::Back => todo!(),
-                    }
-                }
-                MainMenuChoices::Customers => {
-                    match EntityOptions::inquire(&format!("{} Menu", main_menu_choice.to_string()))
-                    {
-                        EntityOptions::New => {
-                            self.new_customer()?;
-                        }
-                        EntityOptions::Update => self.update_customer()?,
-                        EntityOptions::Delete => todo!(),
-                        EntityOptions::View => todo!(),
-                        EntityOptions::Back => todo!(),
-                    }
-                }
-                MainMenuChoices::Save => self.data_save(),
-                MainMenuChoices::Settings => {
-                    debug!("settings");
-                    self.settings()?
-                }
-                MainMenuChoices::Quit => {
-                    debug!("quitting");
-                }
-            };
+        let customer = self.inquire_customer_mut()?;
 
-            if main_menu_choice != MainMenuChoices::Quit {
-                main_menu_choice = MainMenuChoices::inquire("Main Menu");
+        let mut customer_option: CustomerOptions = CustomerOptions::inquire("Customer Menu")?;
+
+        // Once a customer is selected, use them for all other operations.
+        while customer_option != CustomerOptions::Back {
+            match customer_option {
+                CustomerOptions::ViewJobs => customer.display_jobs()?,
+                CustomerOptions::AddJob => customer.new_job()?,
+                CustomerOptions::UpdateJob => todo!(),
+                CustomerOptions::ViewVehicles => customer.display_vehicles()?,
+                CustomerOptions::AddVehicle => customer.new_vehicle()?,
+                CustomerOptions::UpdateVehicle => todo!(),
+                CustomerOptions::UpdateName => customer.update_name()?,
+                CustomerOptions::Back => todo!(),
             }
+            customer_option = CustomerOptions::inquire("Customer Menu")?;
         }
 
         Ok(())

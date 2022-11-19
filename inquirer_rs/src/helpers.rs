@@ -1,4 +1,6 @@
-use crate::Inquireable;
+use anyhow::Result;
+
+use crate::{error::InquisitionError, Inquireable};
 
 pub fn into_menu_string<T: std::fmt::Display>(choices: &Vec<T>, title: &str) -> String {
     let mut display = String::new();
@@ -18,30 +20,29 @@ pub fn into_menu_string<T: std::fmt::Display>(choices: &Vec<T>, title: &str) -> 
     display
 }
 
-pub fn inquire_menu<T: Clone + std::fmt::Display>(display_menu: String, choices: &Vec<T>) -> T {
-    let mut result: Option<T> = None;
-    let invalid_menu_choice_msg = "is invalid choice.";
-
-    while result.is_none() {
+pub fn inquire_menu<T: Clone + std::fmt::Display + std::fmt::Debug>(
+    display_menu: String,
+    choices: &Vec<T>,
+) -> Result<T> {
+    loop {
         println!("{}", display_menu);
 
-        result = match String::inquire(Some("Enter Choice: ")) {
-            Some(ch) => match ch.parse::<usize>() {
-                Ok(n) => match choices.get(n - 1).cloned() {
-                    Some(res) => Some(res),
-                    None => {
-                        println!("\n---\nError: [{}] {}\n---", n, invalid_menu_choice_msg);
-                        None
-                    }
-                },
-                Err(_) => {
-                    println!("\n---\nError: [{}] {}\n---", ch, invalid_menu_choice_msg);
-                    None
-                }
+        let result = String::inquire(Some("Enter Choice: "))?;
+
+        match result.parse::<usize>() {
+            Ok(n) => match choices.get(n - 1).cloned() {
+                Some(res) => return Ok(res),
+                None => Err(InquisitionError::MenuChoiceError(
+                    format!("Invalid Menu Choice: {}", n).to_string(),
+                ))?,
             },
-            None => None,
+            Err(e) => Err(InquisitionError::MenuChoiceError(
+                format!(
+                    "Failed Parsing Invalid Choice Value: {}, Error: {}",
+                    result, e
+                )
+                .to_string(),
+            ))?,
         }
     }
-
-    result.expect("Menu choice should never be None")
 }
