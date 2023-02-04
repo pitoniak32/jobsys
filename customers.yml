@@ -1,41 +1,41 @@
-bd14c7b0-1236-45a3-aca5-576d8472da2d:
-  id: bd14c7b0-1236-45a3-aca5-576d8472da2d
-  name: test
+96435256-db62-46ea-9e64-d908243fa370:
+  id: 96435256-db62-46ea-9e64-d908243fa370
+  name: don
+  vehicles:
+    ce045179-528b-47d0-b9a7-9a76e15d4041:
+      id: ce045179-528b-47d0-b9a7-9a76e15d4041
+      vin_num: '12346'
+      make: honda
+      model: civic
+      year: null
+      last_oil_change: null
+      date_created: 2022-11-14T03:35:50.594736484Z
+      last_updated: 2022-11-14T03:35:50.594736484Z
+    40fd3a21-d6e7-4696-95ec-6a94a681653b:
+      id: 40fd3a21-d6e7-4696-95ec-6a94a681653b
+      vin_num: '1234'
+      make: ford
+      model: f-150
+      year: '2022'
+      last_oil_change: null
+      date_created: 2022-11-14T03:31:01.116051867Z
+      last_updated: 2022-11-14T03:31:01.116051867Z
+  jobs:
+    8838db56-a4ff-418f-b79e-26edf3b2e147:
+      id: 8838db56-a4ff-418f-b79e-26edf3b2e147
+      description: test
+      vehicle_id: ce045179-528b-47d0-b9a7-9a76e15d4041
+      date_created: 2023-02-04T15:10:39.812477875-05:00
+      last_updated: 2023-02-04T15:10:39.812477875-05:00
+  date_created: 2022-11-13T21:08:34.610992721-05:00
+  last_updated: 2023-02-04T15:10:43.404290950-05:00
+ecf91f1d-2802-4642-96f3-18862d2db402:
+  id: ecf91f1d-2802-4642-96f3-18862d2db402
+  name: test_name
   vehicles: {}
   jobs: {}
-  date_created: 2022-11-16T20:30:52.901979751-05:00
-  last_updated: 2022-11-16T20:30:52.901979751-05:00
-15a6c4ba-23e7-41cd-bff5-50bc3ae02aff:
-  id: 15a6c4ba-23e7-41cd-bff5-50bc3ae02aff
-  name: david_test
-  vehicles:
-    725166e1-aa5c-4791-8cb6-026f6b9fed58:
-      id: 725166e1-aa5c-4791-8cb6-026f6b9fed58
-      vin_num: '123'
-      make: test_make
-      model: test_model
-      year: null
-      last_oil_change: null
-      date_created: 2022-11-17T01:32:49.390719162Z
-      last_updated: 2022-11-17T01:32:49.390719162Z
-    191cc36a-bb68-43a2-91f2-8f7dc2518588:
-      id: 191cc36a-bb68-43a2-91f2-8f7dc2518588
-      vin_num: '1254'
-      make: honda
-      model: Odessy
-      year: null
-      last_oil_change: null
-      date_created: 2022-11-14T03:53:18.629571943Z
-      last_updated: 2022-11-14T03:53:18.629571943Z
-  jobs:
-    5006a6ab-8f81-45c6-b8ef-4792e0a7a758:
-      id: 5006a6ab-8f81-45c6-b8ef-4792e0a7a758
-      description: test description for a job
-      vehicle_id: null
-      date_created: 2022-11-19T11:59:07.481579219-05:00
-      last_updated: 2022-11-19T11:59:07.481579219-05:00
-  date_created: 2022-11-13T19:48:59.012817767-05:00
-  last_updated: 2022-11-19T11:59:15.463014722-05:00
+  date_created: 2022-11-13T19:48:54.498863812-05:00
+  last_updated: 2022-11-13T19:48:54.498863812-05:00
 54a7fd47-a653-4ad4-b96e-5e5abb597633:
   id: 54a7fd47-a653-4ad4-b96e-5e5abb597633
   name: testing_update_name
@@ -45,7 +45,7 @@ bd14c7b0-1236-45a3-aca5-576d8472da2d:
       vin_num: m
       make: m
       model: m
-      year: 12
+      year: '12'
       last_oil_change: null
       date_created: 2022-11-17T02:47:59.689081783Z
       last_updated: 2022-11-17T02:47:59.689081783Z
@@ -73,7 +73,7 @@ bd14c7b0-1236-45a3-aca5-576d8472da2d:
       vin_num: '123'
       make: m
       model: m
-      year: 2012
+      year: '2012'
       last_oil_change: null
       date_created: 2022-11-17T02:35:19.913041894Z
       last_updated: 2022-11-17T02:35:19.913041894Z
@@ -87,35 +87,41 @@ bd14c7b0-1236-45a3-aca5-576d8472da2d:
   jobs: {}
   date_created: 2022-11-16T21:47:35.482038330-05:00
   last_updated: 2022-11-16T21:47:35.482038330-05:00
-ecf91f1d-2802-4642-96f3-18862d2db402:
-  id: ecf91f1d-2802-4642-96f3-18862d2db402
-  name: test_name
+bd14c7b0-1236-45a3-aca5-576d8472da2d:
+  id: bd14c7b0-1236-45a3-aca5-576d8472da2d
+  name: test
   vehicles: {}
   jobs: {}
-  date_created: 2022-11-13T19:48:54.498863812-05:00
-  last_updated: 2022-11-13T19:48:54.498863812-05:00
-96435256-db62-46ea-9e64-d908243fa370:
-  id: 96435256-db62-46ea-9e64-d908243fa370
-  name: don
+  date_created: 2022-11-16T20:30:52.901979751-05:00
+  last_updated: 2022-11-16T20:30:52.901979751-05:00
+15a6c4ba-23e7-41cd-bff5-50bc3ae02aff:
+  id: 15a6c4ba-23e7-41cd-bff5-50bc3ae02aff
+  name: david_test
   vehicles:
-    40fd3a21-d6e7-4696-95ec-6a94a681653b:
-      id: 40fd3a21-d6e7-4696-95ec-6a94a681653b
-      vin_num: '1234'
-      make: ford
-      model: f-150
-      year: 2022
-      last_oil_change: null
-      date_created: 2022-11-14T03:31:01.116051867Z
-      last_updated: 2022-11-14T03:31:01.116051867Z
-    ce045179-528b-47d0-b9a7-9a76e15d4041:
-      id: ce045179-528b-47d0-b9a7-9a76e15d4041
-      vin_num: '12346'
+    191cc36a-bb68-43a2-91f2-8f7dc2518588:
+      id: 191cc36a-bb68-43a2-91f2-8f7dc2518588
+      vin_num: '1254'
       make: honda
-      model: civic
+      model: Odessy
       year: null
       last_oil_change: null
-      date_created: 2022-11-14T03:35:50.594736484Z
-      last_updated: 2022-11-14T03:35:50.594736484Z
-  jobs: {}
-  date_created: 2022-11-13T21:08:34.610992721-05:00
-  last_updated: 2022-11-13T22:35:50.594808574-05:00
+      date_created: 2022-11-14T03:53:18.629571943Z
+      last_updated: 2022-11-14T03:53:18.629571943Z
+    725166e1-aa5c-4791-8cb6-026f6b9fed58:
+      id: 725166e1-aa5c-4791-8cb6-026f6b9fed58
+      vin_num: '123'
+      make: test_make
+      model: test_model
+      year: null
+      last_oil_change: null
+      date_created: 2022-11-17T01:32:49.390719162Z
+      last_updated: 2022-11-17T01:32:49.390719162Z
+  jobs:
+    5006a6ab-8f81-45c6-b8ef-4792e0a7a758:
+      id: 5006a6ab-8f81-45c6-b8ef-4792e0a7a758
+      description: test description for a job
+      vehicle_id: null
+      date_created: 2022-11-19T11:59:07.481579219-05:00
+      last_updated: 2022-11-19T11:59:07.481579219-05:00
+  date_created: 2022-11-13T19:48:59.012817767-05:00
+  last_updated: 2022-11-19T11:59:15.463014722-05:00

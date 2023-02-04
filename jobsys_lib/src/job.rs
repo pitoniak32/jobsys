@@ -17,15 +17,11 @@ pub struct Job {
 impl Inquireable for Job {
     type Item = Job;
 
-    fn inquire(_: Option<&str>) -> anyhow::Result<Self::Item> {
+    fn inquire(_: &str) -> anyhow::Result<Self::Item> {
         let now = Local::now();
         let cust = Job {
             id: Uuid::new_v4(),
-            description: String::inquire_retry_on_none(
-                2,
-                Some("Invalid String."),
-                Some("Enter Description: "),
-            )?,
+            description: String::inquire("Enter Description: ")?,
             vehicle_id: None,
             date_created: now,
             last_updated: now,

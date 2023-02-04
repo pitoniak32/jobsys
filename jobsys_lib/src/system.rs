@@ -4,7 +4,7 @@ use std::path::Path;
 
 use anyhow::Result;
 use clap::Parser;
-use inquirer_rs::helpers::{inquire_menu, into_menu_string};
+use inquirer_rs::helpers::inquire_menu;
 use inquirer_rs::menu::InquireableMenu;
 use inquirer_rs::Inquireable;
 use log::debug;
@@ -39,19 +39,18 @@ impl JobSys {
     }
 
     pub fn new_customer(&mut self) -> Result<()> {
-        match Customer::inquire_retry_on_none(2, None, None) {
+        match Customer::inquire("") {
             Ok(cust) => {
                 JobSys::log_insert_result(self.customers.insert(cust.get_id().to_owned(), cust));
                 Ok(())
             }
-            Err(e) => Err(JobSysError::FailedToCreateNewCustomer)?,
+            Err(_) => Err(JobSysError::FailedToCreateNewCustomer)?,
         }
     }
 
     pub fn inquire_customer_mut<'a>(&'a mut self) -> Result<&'a mut Customer> {
         let choices: Vec<Customer> = self.customers.clone().into_values().collect();
-        let display = into_menu_string(&choices, "Customers");
-        let choice = inquire_menu(display, &choices)?;
+        let choice = inquire_menu("Customers", choices)?;
         Ok(self.customers.get_mut(&choice.get_id()).unwrap())
     }
 

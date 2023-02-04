@@ -4,7 +4,7 @@ use std::fmt;
 use anyhow::Result;
 use chrono::{DateTime, Local};
 use inquirer_rs::{
-    helpers::{inquire_menu, into_menu_string},
+    helpers::inquire_menu,
     Inquireable,
 };
 use serde::{Deserialize, Serialize};
@@ -36,10 +36,8 @@ impl Customer {
     }
 
     pub fn update_name(&mut self) -> Result<()> {
-        let name = String::inquire_retry_on_none(
-            2,
-            Some("Invalid Customer Please Try Again."),
-            Some("Enter name: "),
+        let name = String::inquire(
+            "Enter name: ",
         )?;
         self.name = name;
         self.set_last_updated();
@@ -66,7 +64,7 @@ impl Customer {
 
     pub fn new_vehicle(&mut self) -> Result<()> {
         let vehicle =
-            Vehicle::inquire_retry_on_none(2, Some("Invalid Vehicle Please Try Again."), None)?;
+            Vehicle::inquire("")?;
         self.upsert_vehicle(vehicle);
         Ok(())
     }
@@ -91,12 +89,11 @@ impl Customer {
 
     pub fn new_job(&mut self) -> Result<()> {
         // Create a new job.
-        let mut job = Job::inquire(None)?;
+        let mut job = Job::inquire("")?;
 
         // Ask the user to pick the vehicle the job is for.
         let vehicle_choices: Vec<Vehicle> = self.vehicles.clone().into_values().collect();
-        let vehicle_menu = into_menu_string(&vehicle_choices, "");
-        let choice = inquire_menu(vehicle_menu, &vehicle_choices)?;
+        let choice = inquire_menu("Vehichles", vehicle_choices)?;
 
         // Update the job to be on the vehicle the user chooses.
         job.set_vehicle_id(choice.get_id());
@@ -113,11 +110,11 @@ impl Customer {
 
 impl Inquireable for Customer {
     type Item = Customer;
-    fn inquire(_: Option<&str>) -> Result<Self::Item> {
+    fn inquire(_: &str) -> Result<Self::Item> {
         let now = Local::now();
         let cust = Customer {
             id: Uuid::new_v4(),
-            name: String::inquire_retry_on_none(2, Some("Invalid String."), Some("Enter Name: "))?,
+            name: String::inquire("Enter Name: ")?,
             vehicles: HashMap::new(),
             jobs: HashMap::new(),
             date_created: now,

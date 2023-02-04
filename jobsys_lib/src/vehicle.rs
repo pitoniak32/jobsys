@@ -1,7 +1,6 @@
 use std::fmt;
 
 use anyhow::Result;
-use chrono::{DateTime, Datelike, NaiveDate, Utc};
 use inquirer_rs::Inquireable;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -14,15 +13,15 @@ pub struct Vehicle {
     vin_num: String,
     make: String,
     model: String,
-    year: Option<i32>,
-    last_oil_change: Option<DateTime<Utc>>,
-    date_created: DateTime<Utc>,
-    last_updated: DateTime<Utc>,
+    year: Option<String>,
+    last_oil_change: Option<String>,
+    date_created: String,
+    last_updated: String,
 }
 
 impl Vehicle {
-    pub fn new(vin_num: String, make: String, model: String, year: Option<i32>) -> Vehicle {
-        let now = Utc::now();
+    pub fn new(vin_num: String, make: String, model: String, year: Option<String>) -> Vehicle {
+        let now = "";
         Vehicle {
             id: Uuid::new_v4(),
             vin_num,
@@ -30,20 +29,20 @@ impl Vehicle {
             model,
             year,
             last_oil_change: None,
-            date_created: now,
-            last_updated: now,
+            date_created: now.into(),
+            last_updated: now.into(),
         }
     }
 }
 
 impl Inquireable for Vehicle {
     type Item = Vehicle;
-    fn inquire(_prompt_label: Option<&str>) -> Result<Self::Item> {
+    fn inquire(_: &str) -> Result<Self::Item> {
         Ok(Vehicle::new(
-            String::inquire(Some("Enter vin number: "))?,
-            String::inquire(Some("Enter make: "))?,
-            String::inquire(Some("Enter model: "))?,
-            Some(NaiveDate::inquire(Some("Enter year: "))?.year()),
+            String::inquire("Enter vin number: ")?,
+            String::inquire("Enter make: ")?,
+            String::inquire("Enter model: ")?,
+            Some(String::inquire("Enter year: ")?),
         ))
     }
 }
