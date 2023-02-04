@@ -13,7 +13,6 @@ fn main() -> Result<()> {
         .filter_level(cli.verbose.log_level_filter())
         .init();
 
-
     let mut jobsys = JobSys::new("".to_owned(), cli);
 
     match jobsys.run() {

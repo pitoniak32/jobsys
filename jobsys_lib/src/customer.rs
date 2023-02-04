@@ -3,10 +3,7 @@ use std::fmt;
 
 use anyhow::Result;
 use chrono::{DateTime, Local};
-use inquirer_rs::{
-    helpers::inquire_menu,
-    Inquireable,
-};
+use inquirer_rs::{helpers::inquire_menu, Inquireable};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -36,9 +33,7 @@ impl Customer {
     }
 
     pub fn update_name(&mut self) -> Result<()> {
-        let name = String::inquire(
-            "Enter name: ",
-        )?;
+        let name = String::inquire("Enter name: ")?;
         self.name = name;
         self.set_last_updated();
         Ok(())
@@ -63,8 +58,7 @@ impl Customer {
     }
 
     pub fn new_vehicle(&mut self) -> Result<()> {
-        let vehicle =
-            Vehicle::inquire("")?;
+        let vehicle = Vehicle::inquire("")?;
         self.upsert_vehicle(vehicle);
         Ok(())
     }

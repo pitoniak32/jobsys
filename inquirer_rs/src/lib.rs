@@ -2,7 +2,6 @@ use anyhow::Result;
 use inquire::{validator::Validation, Text};
 use log::debug;
 
-mod error;
 pub mod helpers;
 pub mod menu;
 
@@ -32,10 +31,8 @@ impl Inquireable for String {
             }
         };
 
-        let result = Text::new(prompt_label)
-            .with_validator(validator)
-            .prompt()?;
+        let result = Text::new(prompt_label).with_validator(validator).prompt()?;
 
         Ok(result)
-    }    
+    }
 }

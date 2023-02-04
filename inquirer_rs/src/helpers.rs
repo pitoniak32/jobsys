@@ -1,5 +1,5 @@
 use anyhow::Result;
-use inquire::{Select, InquireError};
+use inquire::{InquireError, Select};
 
 pub fn inquire_menu<T: Clone + std::fmt::Display + std::fmt::Debug>(
     title: &str,

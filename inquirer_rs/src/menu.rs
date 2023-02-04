@@ -15,27 +15,7 @@ pub trait Menuable:
 }
 
 pub trait InquireableMenu {
-    /// Create a string menu of options from the fields of an enum, and prompt the user for a choice
-    ///
-    /// ### Example:
-    /// ```rust
-    /// #[derive(Menuable)]
-    /// enum Example {
-    ///   Option1,
-    ///   Option2,
-    /// }
-    ///
-    /// Example::inquire("Sample Title");
-    ///
-    /// // Output:
-    ///
-    /// // Sample Title
-    /// // ---
-    /// // 1) Option1
-    /// // 2) Option2
-    /// //  
-    /// // Enter choice:
-    /// ```
+    /// Create a menu of options from the fields of an enum, and prompt the user for a choice
     fn inquire<T: Menuable>(title: &str) -> Result<T, InquireError> {
         let choices: Vec<T> = T::iter().collect::<Vec<T>>();
         Select::new(title, choices).prompt()
