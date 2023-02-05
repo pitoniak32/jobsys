@@ -21,7 +21,7 @@ fn main() -> Result<()> {
             jobsys.data_save();
         }
         Err(err) => {
-            error!("System Encountered an Error, Saving Data... msg: {}", err);
+            error!("System Encountered an Error, Saving Data... msg: {err}");
             jobsys.data_save();
             process::exit(1);
         }
